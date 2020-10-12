@@ -1,0 +1,13 @@
+{
+  "code": "thoughtco.maxorders",
+  "name": "Maximum Orders Per Timeslot",
+  "description": "Allows you to set a maximum number of orders that can be accepted at different timeslots",
+  "version": "v1.0.0",
+  "author": "ryanmitchell",
+  "icon": {
+    "class": "fa fa-exclamation-triangle",
+    "backgroundColor": "#111",
+    "color": "#FFF"
+  },
+  "homepage": "https://github.com/thoughtco/ti-ext-tables"
+}
