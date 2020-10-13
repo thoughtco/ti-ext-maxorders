@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'text_title' => 'Max orders',
+    'text_title' => 'Maximum orders',
     'text_form_name' => 'Timeslot',
     'text_empty' => 'No timeslots added',
 
