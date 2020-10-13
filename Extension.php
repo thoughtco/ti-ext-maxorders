@@ -2,11 +2,7 @@
 
 namespace Thoughtco\Maxorders;
 
-use Admin\Widgets\Form;
-use Carbon\Carbon;
 use Event;
-use Igniter\Local\Classes\Location;
-use Illuminate\Foundation\AliasLoader;
 use System\Classes\BaseExtension;
 use Thoughtco\Maxorders\Listeners\MaxOrders;
 
