@@ -33,7 +33,10 @@ class Timeslots extends Model
     ];
     
     public $rules = [
-        'location_id' => 'sometimes|required|int'
+        'location_id' => 'required|int',
+        'timeslot_max' => 'required|int',
+        'timeslot_start' => 'required|valid_time',
+        'timeslot_end' => 'required|valid_time',
     ];
     
     public static function getLocationIdOptions()
