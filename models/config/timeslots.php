@@ -17,7 +17,7 @@ return [
 				'is_enabled' => [
 					'label' => 'lang:admin::lang.text_filter_status',
 					'type' => 'switch',
-					'conditions' => 'is_enabled = :filtered',
+					'conditions' => 'timeslot_status = :filtered',
 				],
 			],	
 		],
@@ -35,12 +35,18 @@ return [
                 'type' => 'text',
                 'sortable' => FALSE,
                 'valueFrom' => 'location_name',
-                'relation' => 'location'
+                'relation' => 'location',
             ],
 			'timeslot_day' => [
 				'label' => 'lang:thoughtco.maxorders::default.column_day',
-				'type' => 'text',
+				'type' => 'day-of-week',
 				'sortable' => FALSE,
+				'formatter' => function($record, $column, $value){
+					$days = Thoughtco\Maxorders\Models\Timeslots::getTimeslotDayOptions();
+					foreach ($value as $i=>$j)
+						$value[$i] = $days[$j];
+					return implode(', ', $value);
+				}
 			],				
 			'timeslot_start' => [
 				'label' => 'lang:thoughtco.maxorders::default.column_start',
