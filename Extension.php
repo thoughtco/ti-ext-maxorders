@@ -17,7 +17,7 @@ class Extension extends BaseExtension
     {
         return [
             'Thoughtco.Maxorders.Manage' => [
-                'description' => 'Create, modify and manage maximum orders per timeslot',
+                'description' => 'Create, modify and manage maximum orders allowed per timeslot',
                 'group' => 'module',
             ],
         ];

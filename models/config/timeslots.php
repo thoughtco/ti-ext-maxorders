@@ -101,13 +101,6 @@ return [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_dayofweek',
 					'type' => 'selectlist',
-					'span' => 'left',
-				],	
-				'timeslot_max' => [
-	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
-					'label' => 'lang:thoughtco.maxorders::default.label_max',
-					'type' => 'number',
-					'span' => 'right',
 				],								
 				'timeslot_start' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
@@ -123,8 +116,28 @@ return [
 					'mode' => 'time',
 					'span' => 'right',
 				],
-				
-				
+				'timeslot_max_type' => [
+	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
+					'label' => 'lang:thoughtco.maxorders::default.label_type',
+					'type' => 'select',
+					'span' => 'left',
+				],	
+				'timeslot_max' => [
+	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
+					'label' => 'lang:thoughtco.maxorders::default.label_max',
+					'type' => 'number',
+					'span' => 'right',
+		        ],
+		        'timeslot_categories' => [
+	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
+		            'label' => 'lang:thoughtco.maxorders::default.label_categories',
+		            'type' => 'selectlist',
+		            'trigger' => [
+		                'action' => 'show',
+		                'field' => 'timeslot_max_type',
+		                'condition' => 'value[covers]',
+		            ],
+		        ],					
 				
 			]
         ]

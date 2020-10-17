@@ -2,6 +2,7 @@
 
 namespace Thoughtco\Maxorders\Models;
 
+use Admin\Models\Categories_model;
 use Admin\Models\Locations_model;
 use ApplicationException;
 use Exception;
@@ -24,6 +25,7 @@ class Timeslots extends Model
     public $casts = [
         'location_id' => 'integer',
         'timeslot_day' => 'array',
+        'timeslot_categories' => 'array',
     ];
     
     public $relation = [
@@ -34,10 +36,16 @@ class Timeslots extends Model
     
     public $rules = [
         'location_id' => 'required|int',
-        'timeslot_max' => 'required|int',
+        'timeslot_max' => 'required|int|min:0',
         'timeslot_start' => 'required|valid_time',
         'timeslot_end' => 'required|valid_time',
+        'timeslot_categories' => 'sometimes|required',
     ];
+    
+    public static function getTimeslotCategoriesOptions()
+    {
+	    return Categories_model::all()->pluck('name', 'category_id');
+    }
     
     public static function getLocationIdOptions()
     {
@@ -57,4 +65,13 @@ class Timeslots extends Model
         }
         return $days;
     }
+    
+    public static function getTimeslotMaxTypeOptions()
+    {
+        return [
+            'orders' => lang('thoughtco.maxorders::default.option_orders'),
+            'covers' => lang('thoughtco.maxorders::default.option_covers'),
+        ];
+    }
+    
 }

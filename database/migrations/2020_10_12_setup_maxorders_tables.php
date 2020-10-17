@@ -20,6 +20,8 @@ class MaxordersTables extends Migration
                 $table->time('timeslot_start');
                 $table->time('timeslot_end');
                 $table->integer('timeslot_max');
+                $table->string('timeslot_max_type')->default('orders');
+                $table->text('timeslot_categories');
                 $table->boolean('timeslot_status')->default(true);
                 $table->timestamps();
             });
