@@ -68,7 +68,7 @@ class MaxOrders
                     {
                         $ordersOnThisDay = $ordersOnThisDay->map(function($order) use ($limitation) {
                             $myCount = 0;
-                            $order->getOrderMenus()
+                            $order->menus
                             ->each(function($orderMenu) use ($limitation, &$myCount) {
                                 $intersect = $this->getMenuCategories($orderMenu->menu_id)->intersect($limitation->timeslot_categories);
                                 if ($intersect->count())
@@ -105,7 +105,13 @@ class MaxOrders
         $result = Orders_model::where('location_id', LocationFacade::getId())
             ->where('order_date', $date)
             ->whereIn('status_id', array_merge(setting('processing_order_status', []), setting('completed_order_status', [])))
-            ->get();
+            ->get()
+            ->map(function($order){
+                return (object)[
+                    'order_time' => $order->order_time,
+                    'menus' => $order->getOrderMenus(),    
+                ];
+            });
 
         return self::$ordersCache[$date] = $result;
     }
