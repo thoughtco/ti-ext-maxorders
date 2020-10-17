@@ -70,11 +70,8 @@ class MaxOrders
                             $myCount = 0;
                             $order->menus
                             ->each(function($orderMenu) use ($limitation, &$myCount) {
-                                $intersect = $this->getMenuCategories($orderMenu->menu_id)->intersect($limitation->timeslot_categories);
-                                if ($intersect->count())
-                                {
+                                if ($this->getMenuCategories($orderMenu->menu_id)->intersect($limitation->timeslot_categories)->count())
                                     $myCount += $orderMenu->quantity;
-                                }
                             });
                             return $myCount;
                         });             
