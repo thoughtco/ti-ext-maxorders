@@ -27,7 +27,7 @@ class MaxOrders
     public function beforeSaveOrder($order, $data)
     {
         $orderDateTime = LocationFacade::instance()->orderDateTime();
-        if ($this->checkTimeslot($orderDateTime->format('Y-m-d H:i:s'), false) === false)
+        if ($this->checkTimeslot($order->order_type, $orderDateTime->format('Y-m-d H:i:s'), true) === false)
             throw new ApplicationException(lang('thoughtco.maxorders::default.error_max_reached'));
     }
 
@@ -37,10 +37,10 @@ class MaxOrders
         if ($workingSchedule->getType() == AbstractLocation::OPENING)
             return;
             
-        return $this->checkTimeslot($timeslot);
+        return $this->checkTimeslot($workingSchedule->getType(), $timeslot);
     }
     
-    private function checkTimeslot($timeslot, $ignoreLocationSetting = true)
+    private function checkTimeslot($workingScheduleType, $timeslot, $checkLocationSetting = false)
     {
         $dateString = Carbon::parse($timeslot)->toDateString();
 
@@ -50,10 +50,11 @@ class MaxOrders
 
         $dayOfWeek = $timeslot->format('w');
         $startTime = Carbon::parse($timeslot);
-        $endTime = Carbon::parse($timeslot)->addMinutes($locationModel->getOrderTimeInterval($workingSchedule->getType()));
+        $endTime = Carbon::parse($timeslot)->addMinutes($locationModel->getOrderTimeInterval($workingScheduleType));
         
         $removeSlot = false;
         
+        // filter orders to only include the timeslot we need
         $timeslotOrders = $ordersOnThisDay->filter(function ($order) use ($startTime, $endTime) {
             $orderTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTime->format('Y-m-d').' '.$order->order_time);
 
@@ -64,12 +65,13 @@ class MaxOrders
         });
         
         // if checking from beforeSaveOrder we also need to be sure we check the location default 
-        if (!$ignoreLocationSetting)
+        if ($checkLocationSetting)
         {
             if ($timeslotOrders->count() >= $locationModel->getOption('limit_orders_count'))
                 return FALSE;
         }
         
+        // get and loop over the extension limitations
         Timeslots::where([
             ['location_id', $locationModel->location_id],
             ['timeslot_status', 1],            
