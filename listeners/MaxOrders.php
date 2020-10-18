@@ -27,8 +27,8 @@ class MaxOrders
     public function beforeSaveOrder($order, $data)
     {
         $orderDateTime = LocationFacade::instance()->orderDateTime();
-        if ($this->checkTimeslot($order->order_type, $orderDateTime->format('Y-m-d H:i:s'), true) === false)
-            throw new ApplicationException(lang('thoughtco.maxorders::default.error_max_reached'));
+        if ($this->checkTimeslot($order->order_type, $orderDateTime, true) === false)
+            throw new \ApplicationException(lang('thoughtco.maxorders::default.error_maximum_reached'));
     }
 
     public function timeslotValid($workingSchedule, $timeslot)
@@ -47,30 +47,29 @@ class MaxOrders
         $ordersOnThisDay = $this->getOrders($dateString);
 
         $locationModel = LocationFacade::current();
-
+        
         $dayOfWeek = $timeslot->format('w');
         $startTime = Carbon::parse($timeslot);
-        $endTime = Carbon::parse($timeslot)->addMinutes($locationModel->getOrderTimeInterval($workingScheduleType));
+        $endTime = Carbon::parse($timeslot)->addMinutes($locationModel->getOrderTimeInterval($workingScheduleType))->subMinute();
         
         $removeSlot = false;
         
         // filter orders to only include the timeslot we need
         $timeslotOrders = $ordersOnThisDay->filter(function ($order) use ($startTime, $endTime) {
             $orderTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTime->format('Y-m-d').' '.$order->order_time);
-
             return $orderTime->between(
                 $startTime,
                 $endTime
             );
         });
-        
+                
         // if checking from beforeSaveOrder we also need to be sure we check the location default 
-        if ($checkLocationSetting)
+        if ($checkLocationSetting && $locationModel->getOption('limit_orders'))
         {
             if ($timeslotOrders->count() >= $locationModel->getOption('limit_orders_count'))
                 return FALSE;
         }
-        
+                
         // get and loop over the extension limitations
         Timeslots::where([
             ['location_id', $locationModel->location_id],
@@ -104,13 +103,13 @@ class MaxOrders
                     } else {
                         $orderCount = $timeslotOrders->count();
                     }
-                    
+
                     if ($orderCount >= $limitation->timeslot_max)
                         $removeSlot = true;
                 }
             }
         });
-
+        
         if ($removeSlot)
             return FALSE;
     }
@@ -122,7 +121,7 @@ class MaxOrders
 
         $result = Orders_model::where('location_id', LocationFacade::getId())
             ->where('order_date', $date)
-            ->whereIn('status_id', array_merge(setting('processing_order_status', []), setting('completed_order_status', [])))
+            ->whereIn('status_id', array_merge([setting('default_order_status', -1)], setting('processing_order_status', []), setting('completed_order_status', [])))
             ->get()
             ->map(function($order){
                 return (object)[
