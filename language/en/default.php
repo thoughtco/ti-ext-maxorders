@@ -23,5 +23,7 @@ return [
     'label_categories' => 'Count items in categories',
     
     'option_orders' => 'Orders',
-    'option_covers' => 'Covers (mains)'
+    'option_covers' => 'Covers (mains)',
+    
+    'error_maximum_reached' => 'Maximum number of orders reached in this time slot, please choose a different one',
 ];
