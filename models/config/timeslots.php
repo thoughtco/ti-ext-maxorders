@@ -30,12 +30,10 @@ return [
                     'href' => 'thoughtco/maxorders/timeslots/edit/{id}',
                 ],
             ],
-			'location_name' => [
-                'label' => 'lang:thoughtco.maxorders::default.column_location',
+			'timeslot_label' => [
+                'label' => 'lang:thoughtco.maxorders::default.column_label',
                 'type' => 'text',
-                'sortable' => FALSE,
-                'valueFrom' => 'location_name',
-                'relation' => 'location',
+                'sortable' => TRUE,
             ],
 			'timeslot_day' => [
 				'label' => 'lang:thoughtco.maxorders::default.column_day',
@@ -85,10 +83,15 @@ return [
         ],
         'tabs' => [
 	        'fields' => [
-	            'location_id' => [
+	            'timeslot_label' => [
+	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
+	                'label' => 'lang:thoughtco.maxorders::default.label_label',
+	                'type' => 'text',
+	            ],				
+	            'timeslot_locations' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 	                'label' => 'lang:thoughtco.maxorders::default.label_location',
-	                'type' => 'select',
+	                'type' => 'selectlist',
 					'span' => 'left',
 	            ],
 				'timeslot_status' => [

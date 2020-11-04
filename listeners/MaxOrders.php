@@ -70,13 +70,18 @@ class MaxOrders
             if ($timeslotOrders->count() >= $locationModel->getOption('limit_orders_count'))
                 return FALSE;
         }
+        
+        $customerLocation = $locationModel->location_id;
                 
         // get and loop over the extension limitations
         Timeslots::where([
-            ['location_id', $locationModel->location_id],
             ['timeslot_status', 1],            
         ])
-        ->each(function($limitation) use (&$removeSlot, $dayOfWeek, $startTime, $timeslotOrders){
+        ->each(function($limitation) use ($customerLocation, &$removeSlot, $dayOfWeek, $startTime, $timeslotOrders){
+            
+            if (!in_array($customerLocation, $limitation->timeslot_locations))
+                return;      
+           
             if (in_array($dayOfWeek, $limitation->timeslot_day))
             {
                 $limitationStart = Carbon::createFromFormat('Y-m-d H:i:s', $startTime->format('Y-m-d').' '.$limitation->timeslot_start);

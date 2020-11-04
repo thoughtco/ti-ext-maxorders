@@ -23,7 +23,7 @@ class Timeslots extends Model
     public $timestamps = TRUE;
 
     public $casts = [
-        'location_id' => 'integer',
+        'timeslot_locations' => 'array',
         'timeslot_day' => 'array',
         'timeslot_categories' => 'array',
     ];
@@ -35,7 +35,8 @@ class Timeslots extends Model
     ];
     
     public $rules = [
-        'location_id' => 'required|int',
+        'timeslot_label' => 'required',
+        'timeslot_locations' => 'required',
         'timeslot_max' => 'required|int|min:0',
         'timeslot_start' => 'required|valid_time',
         'timeslot_end' => 'required|valid_time',
@@ -47,7 +48,7 @@ class Timeslots extends Model
 	    return Categories_model::all()->pluck('name', 'category_id');
     }
     
-    public static function getLocationIdOptions()
+    public static function getTimeslotLocationsOptions()
     {
 	    $locations = [];
 	    foreach (Locations_model::all() as $location){

@@ -15,7 +15,8 @@ class MaxordersTables extends Migration
             Schema::create('thoughtco_maxorders', function (Blueprint $table) {
                 $table->engine = 'InnoDB';
                 $table->increments('id');
-                $table->integer('location_id');
+                $table->text('timeslot_label');
+                $table->text('timeslot_locations');
                 $table->text('timeslot_day');
                 $table->integer('timeslot_order_type');
                 $table->time('timeslot_start');
