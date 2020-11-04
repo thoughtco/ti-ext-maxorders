@@ -36,7 +36,6 @@ class Timeslots extends Model
     
     public $rules = [
         'location_id' => 'required|int',
-        'location_day' => 'required',
         'timeslot_max' => 'required|int|min:0',
         'timeslot_start' => 'required|valid_time',
         'timeslot_end' => 'required|valid_time',

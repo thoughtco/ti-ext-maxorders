@@ -4,6 +4,7 @@ namespace Thoughtco\Maxorders\Listeners;
 
 use Admin\Models\Menus_model;
 use Admin\Models\Orders_model;
+use App;
 use Carbon\Carbon;
 use Igniter\Flame\Location\Models\AbstractLocation;
 use Igniter\Flame\Traits\EventEmitter;
@@ -81,7 +82,22 @@ class MaxOrders
                 $limitationStart = Carbon::createFromFormat('Y-m-d H:i:s', $startTime->format('Y-m-d').' '.$limitation->timeslot_start);
                 $limitationEnd = Carbon::createFromFormat('Y-m-d H:i:s', $startTime->format('Y-m-d').' '.$limitation->timeslot_end);
                 if ($startTime->between($limitationStart, $limitationEnd))
-                {                                        
+                {    
+                    // order type
+                    if ($limitation->timeslot_order_type > 0)
+                    {
+                        $limitationOrderType = ($limitation->timeslot_order_type == 1 ? 'delivery' : 'collection');
+                        
+                        // if its not the same as this limitation order type
+                        if (App::make('location')->orderType() != $limitationOrderType)
+                            return;
+                        
+                        // we only want orders of this order type
+                        $timeslotOrders = $timeslotOrders->filter(function($order) use ($limitationOrderType) {
+                            return $order->order_type == $limitationOrderType; 
+                        });
+                    }
+                                                        
                     // if limiting by categories then we need to count up the number of items
                     // in the categories
                     if ($limitation->timeslot_max_type == 'covers')

@@ -21,9 +21,15 @@ return [
     'label_max' => 'Amount',
     'label_type' => 'Maximum number of',
     'label_categories' => 'Count items in categories',
+    'label_ordertype' => 'Order type',
     
     'option_orders' => 'Orders',
     'option_covers' => 'Covers (mains)',
     
     'error_maximum_reached' => 'Maximum number of orders reached in this time slot, please choose a different one',
+    
+    'value_all' => 'All',
+    'value_delivery' => 'Delivery',
+    'value_collection' => 'Collection',
+    
 ];

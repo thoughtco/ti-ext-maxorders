@@ -101,7 +101,19 @@ return [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_dayofweek',
 					'type' => 'selectlist',
-				],								
+					'span' => 'left',
+				],					
+		        'timeslot_order_type' => [
+	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
+		            'label' => 'lang:thoughtco.maxorders::default.label_ordertype',
+		            'type' => 'radiotoggle',
+		            'span' => 'right',
+		            'options' => [
+		            	'lang:thoughtco.maxorders::default.value_all',
+		            	'lang:thoughtco.maxorders::default.value_delivery',
+		            	'lang:thoughtco.maxorders::default.value_collection',
+		            ],
+		        ],				
 				'timeslot_start' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_starttime',

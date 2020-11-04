@@ -17,6 +17,7 @@ class MaxordersTables extends Migration
                 $table->increments('id');
                 $table->integer('location_id');
                 $table->text('timeslot_day');
+                $table->integer('timeslot_order_type');
                 $table->time('timeslot_start');
                 $table->time('timeslot_end');
                 $table->integer('timeslot_max');
