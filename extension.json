@@ -1,6 +1,6 @@
 {
   "code": "thoughtco.maxorders",
-  "name": "Maximum Orders Per Timeslot",
+  "name": "Limit Maximum Orders",
   "description": "This extension allows you to set a maximum number of orders that can be accepted at different timeslots.",
   "version": "v1.0.2",
   "author": "ryanmitchell",
