@@ -60,19 +60,4 @@ class Timeslots extends \Admin\Classes\AdminController
     {
         $this->asExtension('ListController')->index();
     }
-   
-    public function listExtendQuery($query)
-    {
-        if ($locationId = $this->getLocationId()){
-            $query->where('location_id', $locationId);
-        }
-    }
-
-    public function formExtendQuery($query)
-    {
-        if ($locationId = $this->getLocationId()){
-            $query->where('location_id', $locationId);
-        }
-    }
-
 }
