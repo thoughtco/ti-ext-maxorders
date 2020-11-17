@@ -37,10 +37,10 @@ class Timeslots extends Model
     public $rules = [
         'timeslot_label' => 'required',
         'timeslot_locations' => 'required',
+        'timeslot_day' => 'required',
         'timeslot_max' => 'required|int|min:0',
         'timeslot_start' => 'required|valid_time',
         'timeslot_end' => 'required|valid_time',
-        'timeslot_categories' => 'sometimes|required',
     ];
     
     public static function getTimeslotCategoriesOptions()
