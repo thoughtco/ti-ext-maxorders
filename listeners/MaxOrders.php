@@ -146,6 +146,7 @@ class MaxOrders
             ->get()
             ->map(function($order){
                 return (object)[
+                    'order_type' => $order->order_type,
                     'order_time' => $order->order_time,
                     'menus' => $order->getOrderMenus(),    
                 ];
