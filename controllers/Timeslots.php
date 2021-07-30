@@ -11,6 +11,7 @@ class Timeslots extends \Admin\Classes\AdminController
     public $implement = [
         'Admin\Actions\FormController',
         'Admin\Actions\ListController',
+        'Admin\Actions\LocationAwareController',
     ];
 
     public $listConfig = [

@@ -61,6 +61,14 @@ return [
 				'type' => 'switch',
 				'sortable' => FALSE,
 			],
+		    'locations' => [
+		        'label' => 'lang:admin::lang.column_location',
+		        'type' => 'text',
+		        'relation' => 'locations',
+		        'select' => 'location_name',
+		        'locationAware' => 'hide',
+		        'invisible' => TRUE,
+		    ],
         ],
     ],
 
@@ -88,12 +96,14 @@ return [
 	                'label' => 'lang:thoughtco.maxorders::default.label_label',
 	                'type' => 'text',
 	            ],				
-	            'timeslot_locations' => [
+			    'locations' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
-	                'label' => 'lang:thoughtco.maxorders::default.label_location',
-	                'type' => 'selectlist',
-					'span' => 'left',
-	            ],
+			        'label' => 'lang:admin::lang.label_location',
+			        'type' => 'relation',
+			        'span' => 'left',
+			        'valueFrom' => 'locations',
+			        'nameFrom' => 'location_name',
+			    ],
 				'timeslot_status' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_status',
