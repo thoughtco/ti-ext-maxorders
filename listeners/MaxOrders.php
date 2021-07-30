@@ -6,10 +6,12 @@ use Admin\Models\Menus_model;
 use Admin\Models\Orders_model;
 use App;
 use Carbon\Carbon;
+use Cart;
 use Igniter\Flame\Location\Models\AbstractLocation;
 use Igniter\Flame\Traits\EventEmitter;
 use Igniter\Local\Facades\Location as LocationFacade;
 use Illuminate\Contracts\Events\Dispatcher;
+use Session;
 use Thoughtco\Maxorders\Models\Timeslots;
 
 class MaxOrders
@@ -23,6 +25,8 @@ class MaxOrders
     {
         $dispatcher->listen('igniter.workingSchedule.timeslotValid', __CLASS__.'@timeslotValid');
         $dispatcher->listen('igniter.checkout.beforeSaveOrder', __CLASS__.'@beforeSaveOrder');
+        $dispatcher->listen('cart.added', __CLASS__.'@cartValidate');
+        $dispatcher->listen('cart.updated', __CLASS__.'@cartValidate');
     }
     
     public function beforeSaveOrder($order, $data)
@@ -30,6 +34,30 @@ class MaxOrders
         $orderDateTime = LocationFacade::instance()->orderDateTime();
         if ($this->checkTimeslot($order->order_type, $orderDateTime, true) === false)
             throw new \ApplicationException(lang('thoughtco.maxorders::default.error_maximum_reached'));
+    }
+    
+    public function cartValidate($cartItem)
+    {
+        if (!Session::get('local_info.order-timeslot'))
+            return;
+            
+        $locationManager = LocationFacade::instance();
+            
+        $workingScheduleType = $locationManager->orderType();
+        $timeslot = $locationManager->orderDateTime();
+        
+        $additionalOrders = 1;
+        $coverMenuItems = [];
+        foreach (Cart::content() as $cartItem) 
+        {
+            $coverMenuItems[] = (object)[
+                'menu_id' => $cartItem->id,
+                'quantity' => $cartItem->qty,
+            ];
+        }
+                    
+        if ($this->checkTimeslot($workingScheduleType, $timeslot, false, $additionalOrders, $coverMenuItems) === FALSE)
+            throw new \ApplicationException(lang('thoughtco.maxorders::default.error_covers_quantity'));        
     }
 
     public function timeslotValid($workingSchedule, $timeslot)
@@ -41,7 +69,7 @@ class MaxOrders
         return $this->checkTimeslot($workingSchedule->getType(), $timeslot);
     }
     
-    private function checkTimeslot($workingScheduleType, $timeslot, $checkLocationSetting = false)
+    private function checkTimeslot($workingScheduleType, $timeslot, $checkLocationSetting = false, $addAdditionalOrders = 1, $coverMenuItems = [])
     {
         $dateString = Carbon::parse($timeslot)->toDateString();
 
@@ -77,7 +105,10 @@ class MaxOrders
         Timeslots::where([
             ['timeslot_status', 1],            
         ])
-        ->each(function($limitation) use ($customerLocation, &$removeSlot, $dayOfWeek, $startTime, $timeslotOrders){
+        ->each(function($limitation) use ($customerLocation, &$removeSlot, $dayOfWeek, $startTime, $timeslotOrders, $coverMenuItems, $addAdditionalOrders){
+            
+            if (!$limitation->timeslot_locations)
+                $limitation->timeslot_locations = [];
             
             if (!in_array($customerLocation, $limitation->timeslot_locations))
                 return;      
@@ -115,22 +146,29 @@ class MaxOrders
                                     $myCount += $orderMenu->quantity;
                             });
                             return $myCount;
-                        });             
+                        });   
+                        
+                        $addAdditionalCovers = 0;
+                        collect($coverMenuItems)
+                            ->each(function($orderMenu) use ($limitation, &$addAdditionalCovers) {
+                                if ($this->getMenuCategories($orderMenu->menu_id)->intersect($limitation->timeslot_categories)->count())
+                                    $addAdditionalCovers += $orderMenu->quantity;
+                            });
 
                         // get sum of all covers
-                        $orderCount = $timeslotOrders->sum();
-                     
+                        $orderCount = $timeslotOrders->sum() + $addAdditionalCovers;
+                                             
                     // otherwise we count orders on this day   
                     } else {
-                        $orderCount = $timeslotOrders->count();
+                        $orderCount = $timeslotOrders->count() + $addAdditionalOrders;
                     }
-
-                    if ($orderCount >= $limitation->timeslot_max)
+                    
+                    if ($orderCount > $limitation->timeslot_max)
                         $removeSlot = true;
                 }
             }
         });
-        
+                
         if ($removeSlot)
             return FALSE;
     }

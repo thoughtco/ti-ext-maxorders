@@ -28,6 +28,7 @@ return [
     'option_covers' => 'Covers (mains)',
     
     'error_maximum_reached' => 'Maximum number of orders reached in this time slot, please choose a different one',
+    'error_covers_quantity' => 'You have more items in your cart than we can make at once',
     
     'value_all' => 'All',
     'value_delivery' => 'Delivery',
