@@ -23,32 +23,35 @@ class Timeslots extends Model
     protected $table = 'thoughtco_maxorders';
 
     public $timestamps = TRUE;
-    
+
     const LOCATIONABLE_RELATION = 'locations';
 
     public $casts = [
         'timeslot_day' => 'array',
         'timeslot_categories' => 'array',
+        'timeslot_order_type' => 'array',
     ];
-    
+
     public $relation = [
         'morphToMany' => [
             'locations' => ['Admin\Models\Locations_model', 'name' => 'locationable'],
         ],
     ];
-    
+
     public $rules = [
+        'timeslot_locations' => 'required',
+        'timeslot_day' => 'required',
         'timeslot_label' => 'required',
         'timeslot_max' => 'required|int|min:0',
         'timeslot_start' => 'required|valid_time',
         'timeslot_end' => 'required|valid_time',
     ];
-    
+
     public static function getTimeslotCategoriesOptions()
     {
 	    return Categories_model::all()->pluck('name', 'category_id');
     }
-    
+
     public static function getTimeslotDayOptions()
     {
         $days = [];
@@ -58,7 +61,7 @@ class Timeslots extends Model
         }
         return $days;
     }
-    
+
     public static function getTimeslotMaxTypeOptions()
     {
         return [
@@ -66,5 +69,5 @@ class Timeslots extends Model
             'covers' => lang('thoughtco.maxorders::default.option_covers'),
         ];
     }
-    
+
 }

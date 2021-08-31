@@ -8,7 +8,7 @@ return [
 		            'label' => 'lang:admin::lang.button_new',
 		            'class' => 'btn btn-primary',
 		            'href' => 'thoughtco/maxorders/timeslots/create',
-		        ],	            
+		        ],
                 'delete' => ['label' => 'lang:admin::lang.button_delete', 'class' => 'btn btn-danger', 'data-request-form' => '#list-form', 'data-request' => 'onDelete', 'data-request-data' => "_method:'DELETE'", 'data-request-data' => "_method:'DELETE'", 'data-request-confirm' => 'lang:admin::lang.alert_warning_confirm'],
             ],
         ],
@@ -19,7 +19,7 @@ return [
 					'type' => 'switch',
 					'conditions' => 'timeslot_status = :filtered',
 				],
-			],	
+			],
 		],
         'columns' => [
             'edit' => [
@@ -45,17 +45,17 @@ return [
 						$value[$i] = $days[$j];
 					return implode(', ', $value);
 				}
-			],				
+			],
 			'timeslot_start' => [
 				'label' => 'lang:thoughtco.maxorders::default.column_start',
 				'type' => 'text',
 				'sortable' => FALSE,
-			],			
+			],
 			'timeslot_end' => [
 				'label' => 'lang:thoughtco.maxorders::default.column_end',
 				'type' => 'text',
 				'sortable' => FALSE,
-			],			  
+			],
 			'timeslot_status' => [
 				'label' => 'lang:thoughtco.maxorders::default.column_status',
 				'type' => 'switch',
@@ -95,7 +95,7 @@ return [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 	                'label' => 'lang:thoughtco.maxorders::default.label_label',
 	                'type' => 'text',
-	            ],				
+	            ],
 			    'locations' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 			        'label' => 'lang:admin::lang.label_location',
@@ -115,25 +115,21 @@ return [
 					'label' => 'lang:thoughtco.maxorders::default.label_dayofweek',
 					'type' => 'selectlist',
 					'span' => 'left',
-				],					
+				],
 		        'timeslot_order_type' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 		            'label' => 'lang:thoughtco.maxorders::default.label_ordertype',
-		            'type' => 'radiotoggle',
+		            'type' => 'selectlist',
 		            'span' => 'right',
-		            'options' => [
-		            	'lang:thoughtco.maxorders::default.value_all',
-		            	'lang:thoughtco.maxorders::default.value_delivery',
-		            	'lang:thoughtco.maxorders::default.value_collection',
-		            ],
-		        ],				
+                    'options' => ['Admin\Models\Locations_model', 'getOrderTypeOptions'],
+		        ],
 				'timeslot_start' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_starttime',
 					'type' => 'datepicker',
 					'mode' => 'time',
 					'span' => 'left',
-				],					
+				],
 				'timeslot_end' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_endtime',
@@ -146,7 +142,7 @@ return [
 					'label' => 'lang:thoughtco.maxorders::default.label_type',
 					'type' => 'select',
 					'span' => 'left',
-				],	
+				],
 				'timeslot_max' => [
 	                'tab' => 'lang:thoughtco.maxorders::default.tab_setup',
 					'label' => 'lang:thoughtco.maxorders::default.label_max',
@@ -162,8 +158,8 @@ return [
 		                'field' => 'timeslot_max_type',
 		                'condition' => 'value[covers]',
 		            ],
-		        ],					
-				
+		        ],
+
 			]
         ]
     ],
