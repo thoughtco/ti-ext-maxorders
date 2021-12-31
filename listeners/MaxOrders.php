@@ -155,12 +155,17 @@ class MaxOrders
                         // get sum of all covers
                         $orderCount = $timeslotOrders->sum() + $addAdditionalCovers;
 
+                        // for covers we may already be at the max, in which case we remove the slot
+                        if ($orderCount == $limitation->timeslot_max) {
+                            $removeSlot = true;
+                        }
+
                     // otherwise we count orders on this day
                     } else {
                         $orderCount = $timeslotOrders->count() + $addAdditionalOrders;
                     }
 
-                    if ($orderCount >= $limitation->timeslot_max)
+                    if ($orderCount > $limitation->timeslot_max)
                         $removeSlot = true;
                 }
             }
