@@ -160,7 +160,7 @@ class MaxOrders
                         $orderCount = $timeslotOrders->count() + $addAdditionalOrders;
                     }
 
-                    if ($orderCount > $limitation->timeslot_max)
+                    if ($orderCount >= $limitation->timeslot_max)
                         $removeSlot = true;
                 }
             }
