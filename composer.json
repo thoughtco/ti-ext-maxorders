@@ -1,0 +1,25 @@
+{
+   "name": "thoughtco/ti-ext-maxorders",
+   "type": "tastyigniter-extension",
+   "description": "This extension allows you to set different limits on the maximum number of orders that can be accepted.",
+   "license": "MIT",
+   "authors": [
+     {
+       "name": "Ryan Mitchell",
+       "email": "ryan@thoughtcollective.com"
+     }
+   ],
+   "extra": {
+     "tastyigniter-extension": {
+       "code": "thoughtco.maxorders",
+       "name": "Limit Maximum Orders",
+       "icon": {
+         "class": "fa fa-exclamation-triangle",
+         "color": "#FFF",
+         "backgroundColor": "#111"
+       },
+       "homepage": "https://github.com/thoughtco/ti-ext-maxorders",
+       "require": {}
+     }
+   }
+ }
